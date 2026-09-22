@@ -1,0 +1,178 @@
+---
+---
+
+<section class="solution section" id="solution">
+  <div class="container">
+    <span class="section__label gsap-fade-up">The Path Forward</span>
+    <h2 class="section__title gsap-fade-up">
+      Your Path to a <span class="text-gradient">Healthier You</span>
+    </h2>
+    <p class="section__subtitle gsap-fade-up">
+      Transformation isn't magic — it's method. Our proven 3-step approach has helped 
+      800+ people achieve lasting results without extreme diets or unsustainable routines.
+    </p>
+
+    <div class="solution__steps gsap-stagger-parent">
+      <div class="solution__step gsap-stagger-child">
+        <div class="solution__step-number">01</div>
+        <div class="solution__step-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4M12 8h.01"/>
+          </svg>
+        </div>
+        <h3 class="solution__step-title">Assess & Understand</h3>
+        <p class="solution__step-text">
+          We begin with a thorough assessment of your body composition, metabolic rate, 
+          lifestyle habits, medical history, and nutritional gaps. Understanding your 
+          unique physiology is the foundation of effective change.
+        </p>
+        <ul class="solution__step-list">
+          <li>Body composition analysis</li>
+          <li>Metabolic rate estimation</li>
+          <li>Dietary habit evaluation</li>
+          <li>Lifestyle & stress assessment</li>
+        </ul>
+      </div>
+
+      <div class="solution__step gsap-stagger-child">
+        <div class="solution__step-number">02</div>
+        <div class="solution__step-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <h3 class="solution__step-title">Personalized Plan</h3>
+        <p class="solution__step-text">
+          Based on your assessment, we create a 100% customized nutrition plan aligned 
+          with your goals, food preferences, and daily routine. No generic templates — 
+          every meal plan is crafted specifically for your body.
+        </p>
+        <ul class="solution__step-list">
+          <li>Custom calorie & macro targets</li>
+          <li>Meal plans with your favorite foods</li>
+          <li>Progressive milestones</li>
+          <li>Supplement guidance (if needed)</li>
+        </ul>
+      </div>
+
+      <div class="solution__step gsap-stagger-child">
+        <div class="solution__step-number">03</div>
+        <div class="solution__step-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <h3 class="solution__step-title">Transform & Sustain</h3>
+        <p class="solution__step-text">
+          With weekly check-ins, plan adjustments, and continuous accountability, 
+          we guide you through every step. The goal isn't just to reach your target 
+          weight — it's to maintain it for life.
+        </p>
+        <ul class="solution__step-list">
+          <li>Weekly progress tracking</li>
+          <li>Dynamic plan adjustments</li>
+          <li>Habit formation coaching</li>
+          <li>Long-term maintenance strategy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connection lines between steps -->
+  <div class="solution__connector"></div>
+</section>
+
+<style lang="scss">
+  .solution {
+    background: $color-bg-primary;
+    position: relative;
+
+    &__steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: $space-8;
+
+      @include respond-to('lg') {
+        grid-template-columns: repeat(3, 1fr);
+        gap: $space-10;
+      }
+    }
+
+    &__step {
+      @include card-base;
+      position: relative;
+      padding: $space-10 $space-8;
+      text-align: left;
+      background: $gradient-card;
+
+      &:hover {
+        .solution__step-icon {
+          transform: scale(1.1);
+          box-shadow: $shadow-glow-emerald;
+        }
+      }
+
+      &-number {
+        position: absolute;
+        top: $space-6;
+        right: $space-6;
+        font-family: $font-heading;
+        font-size: $fs-5xl;
+        font-weight: $fw-black;
+        color: rgba($color-accent-emerald, 0.06);
+        line-height: 1;
+      }
+
+      &-icon {
+        @include flex-center;
+        width: 72px;
+        height: 72px;
+        background: rgba($color-accent-emerald, 0.1);
+        border: 1px solid rgba($color-accent-emerald, 0.2);
+        border-radius: $radius-xl;
+        color: $color-accent-emerald;
+        margin-bottom: $space-6;
+        transition: all $transition-smooth;
+      }
+
+      &-title {
+        @include heading($fs-xl);
+        margin-bottom: $space-3;
+      }
+
+      &-text {
+        @include body-text;
+        margin-bottom: $space-6;
+      }
+
+      &-list {
+        display: flex;
+        flex-direction: column;
+        gap: $space-2;
+
+        li {
+          display: flex;
+          align-items: center;
+          gap: $space-3;
+          font-size: $fs-sm;
+          color: $color-text-secondary;
+
+          &::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: $color-accent-emerald;
+            flex-shrink: 0;
+          }
+        }
+      }
+    }
+  }
+</style>

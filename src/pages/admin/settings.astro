@@ -1,0 +1,91 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { readJson } from '../../utils/jsonDb';
+
+if (!Astro.cookies.has('admin_session')) {
+  return Astro.redirect('/admin/login');
+}
+
+let adminData: any = {};
+try {
+  adminData = await readJson('admin.json');
+} catch (e) {
+  // fallback
+}
+---
+
+<AdminLayout title="Settings">
+  <div class="settings">
+    <header class="settings__header">
+      <h1>Settings</h1>
+      <p>View admin account information.</p>
+    </header>
+
+    <div class="settings__card">
+      <h3>Admin Profile</h3>
+      <div class="info-group">
+        <label>Name</label>
+        <p>{adminData.name}</p>
+      </div>
+      <div class="info-group">
+        <label>Username</label>
+        <p>{adminData.username}</p>
+      </div>
+      
+      <p style="margin-top: 2rem; color: #9ca3af; font-size: 0.875rem;">
+        Note: To change your username or password, please edit the <code>src/data/admin.json</code> file locally as requested.
+      </p>
+    </div>
+  </div>
+</AdminLayout>
+
+<style lang="scss">
+  .settings {
+    display: flex;
+    flex-direction: column;
+    gap: $space-8;
+
+    &__header {
+      h1 {
+        font-family: $font-heading;
+        font-size: $fs-2xl;
+        color: $color-text-primary;
+        margin-bottom: $space-2;
+      }
+      p {
+        color: $color-text-secondary;
+      }
+    }
+
+    &__card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: $radius-lg;
+      padding: $space-8;
+      max-width: 600px;
+
+      h3 {
+        color: $color-accent-emerald;
+        margin-bottom: $space-6;
+        font-size: $fs-lg;
+      }
+    }
+  }
+
+  .info-group {
+    margin-bottom: $space-4;
+    
+    label {
+      font-size: $fs-sm;
+      color: $color-text-secondary;
+      text-transform: uppercase;
+      letter-spacing: $ls-wide;
+    }
+
+    p {
+      color: $color-text-primary;
+      font-size: $fs-lg;
+      margin-top: $space-1;
+    }
+  }
+</style>

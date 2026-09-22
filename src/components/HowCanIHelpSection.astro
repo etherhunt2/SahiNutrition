@@ -1,0 +1,230 @@
+---
+---
+
+<section class="how-help section" id="how-help">
+  <div class="container">
+    <span class="section__label gsap-fade-up">Our Services</span>
+    <h2 class="section__title gsap-fade-up">
+      How Can I <span class="text-gradient">Help You?</span>
+    </h2>
+    <p class="section__subtitle gsap-fade-up">
+      Every journey is different. Here's how expert health coaches guide their 
+      clients from struggle to success, backed by behavioral psychology and nutritional science.
+    </p>
+
+    <div class="how-help__grid gsap-stagger-parent">
+      <div class="how-help__card gsap-stagger-child">
+        <div class="how-help__card-header">
+          <div class="how-help__card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+              <path d="M16 13H8"/>
+              <path d="M16 17H8"/>
+              <path d="M10 9H8"/>
+            </svg>
+          </div>
+          <span class="how-help__card-tag">Core Service</span>
+        </div>
+        <h3 class="how-help__card-title">Personalized Diet Planning</h3>
+        <p class="how-help__card-text">
+          A customized meal plan tailored to your body type, metabolic rate, food preferences, 
+          and cultural eating habits. We calculate your exact caloric needs and create 
+          macro-optimized plans that you'll actually enjoy following.
+        </p>
+        <ul class="how-help__card-features">
+          <li>Calorie & macro calculation</li>
+          <li>Meal timing optimization</li>
+          <li>Vegetarian/Non-veg options</li>
+        </ul>
+      </div>
+
+      <div class="how-help__card gsap-stagger-child">
+        <div class="how-help__card-header">
+          <div class="how-help__card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <span class="how-help__card-tag">Guidance</span>
+        </div>
+        <h3 class="how-help__card-title">1-on-1 Lifestyle Coaching</h3>
+        <p class="how-help__card-text">
+          Behavioral psychology shows that accountability is the #1 predictor of success. 
+          Through regular coaching sessions, we address stress eating, emotional triggers, 
+          sleep patterns, and help you build sustainable habits through habit stacking.
+        </p>
+        <ul class="how-help__card-features">
+          <li>Behavioral pattern analysis</li>
+          <li>Stress & sleep management</li>
+          <li>Habit stacking methodology</li>
+        </ul>
+      </div>
+
+      <div class="how-help__card gsap-stagger-child">
+        <div class="how-help__card-header">
+          <div class="how-help__card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <span class="how-help__card-tag">Tracking</span>
+        </div>
+        <h3 class="how-help__card-title">Progress Monitoring</h3>
+        <p class="how-help__card-text">
+          What gets measured gets managed. We track your weight, body measurements, 
+          energy levels, and adherence weekly. Based on your progress data, plans are 
+          dynamically adjusted to ensure you're always moving toward your goal.
+        </p>
+        <ul class="how-help__card-features">
+          <li>Weekly body metrics tracking</li>
+          <li>Dynamic plan adjustments</li>
+          <li>Progress photo comparisons</li>
+        </ul>
+      </div>
+
+      <div class="how-help__card gsap-stagger-child">
+        <div class="how-help__card-header">
+          <div class="how-help__card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <span class="how-help__card-tag">Support</span>
+        </div>
+        <h3 class="how-help__card-title">Ongoing Accountability</h3>
+        <p class="how-help__card-text">
+          Research shows people are 65% more likely to achieve a goal with an accountability 
+          partner. We provide daily check-ins via WhatsApp, weekly review calls, and are 
+          always available to answer questions and keep you motivated.
+        </p>
+        <ul class="how-help__card-features">
+          <li>Daily WhatsApp check-ins</li>
+          <li>Weekly video consultations</li>
+          <li>24/7 doubt resolution</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  .how-help {
+    background: $color-bg-primary;
+    position: relative;
+
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: $space-8;
+
+      @include respond-to('md') {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      @include respond-to('xl') {
+        grid-template-columns: repeat(4, 1fr);
+        gap: $space-6;
+      }
+    }
+
+    &__card {
+      @include card-base;
+      padding: $space-8;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: $gradient-primary;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform $transition-smooth;
+      }
+
+      &:hover::before {
+        transform: scaleX(1);
+      }
+
+      &:hover {
+        .how-help__card-icon {
+          background: rgba($color-accent-emerald, 0.15);
+          transform: scale(1.1);
+        }
+      }
+
+      &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: $space-6;
+      }
+
+      &-icon {
+        @include flex-center;
+        width: 64px;
+        height: 64px;
+        background: rgba($color-accent-emerald, 0.08);
+        border-radius: $radius-lg;
+        color: $color-accent-emerald;
+        transition: all $transition-smooth;
+      }
+
+      &-tag {
+        font-size: $fs-xs;
+        font-weight: $fw-medium;
+        color: $color-accent-gold;
+        background: rgba($color-accent-gold, 0.1);
+        padding: $space-1 $space-3;
+        border-radius: $radius-full;
+        text-transform: uppercase;
+        letter-spacing: $ls-wide;
+      }
+
+      &-title {
+        @include heading($fs-lg);
+        margin-bottom: $space-3;
+      }
+
+      &-text {
+        @include body-text($fs-sm);
+        margin-bottom: $space-6;
+        flex: 1;
+      }
+
+      &-features {
+        display: flex;
+        flex-direction: column;
+        gap: $space-2;
+        padding-top: $space-4;
+        border-top: 1px solid $color-border;
+
+        li {
+          display: flex;
+          align-items: center;
+          gap: $space-2;
+          font-size: $fs-sm;
+          color: $color-text-secondary;
+
+          &::before {
+            content: '✓';
+            color: $color-accent-emerald;
+            font-weight: $fw-bold;
+            font-size: $fs-xs;
+          }
+        }
+      }
+    }
+  }
+</style>

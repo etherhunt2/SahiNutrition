@@ -1,0 +1,195 @@
+---
+---
+
+<footer class="footer section" id="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <h3 class="footer__logo">Sahi<span>Nutrition</span></h3>
+        <p class="footer__tagline">
+          Your body deserves better nutrition. We're here to make it happen.
+        </p>
+      </div>
+
+      <div class="footer__links">
+        <div class="footer__link-group">
+          <h4>Quick Links</h4>
+          <a href="#hero">Home</a>
+          <a href="#why-suffering">Why?</a>
+          <a href="#solution">Solution</a>
+          <a href="#who-we-are">About Us</a>
+        </div>
+
+        <div class="footer__link-group">
+          <h4>Services</h4>
+          <a href="#how-help">Diet Planning</a>
+          <a href="#how-help">Coaching</a>
+          <a href="#how-help">Progress Tracking</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider" />
+
+    <div class="footer__thank-you gsap-scale-in">
+      <h2 class="footer__thank-you-title">
+        Thank You<span class="text-gradient"> ❤</span>
+      </h2>
+      <p class="footer__thank-you-text">
+        Thank you for visiting Sahi Nutrition. Remember — every journey 
+        begins with a single step. We'd love to walk that path with you.
+      </p>
+    </div>
+
+    <hr class="section-divider" />
+
+    <div class="footer__bottom">
+      <p class="footer__copyright">
+        © 2026 Sahi Nutrition. All rights reserved.
+      </p>
+      <div class="footer__social">
+        <a href="#" aria-label="Instagram" class="footer__social-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="2" width="20" height="20" rx="5"/>
+            <circle cx="12" cy="12" r="5"/>
+            <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="YouTube" class="footer__social-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.35 29 29 0 0 0-.46-5.33z"/>
+            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="Facebook" class="footer__social-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style lang="scss">
+  .footer {
+    background: $color-bg-secondary;
+    padding-bottom: $space-8;
+
+    &__top {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: $space-10;
+      margin-bottom: $space-10;
+
+      @include respond-to('md') {
+        grid-template-columns: 1.2fr 1fr;
+      }
+    }
+
+    &__brand {
+      max-width: 400px;
+    }
+
+    &__logo {
+      font-family: $font-heading;
+      font-size: $fs-2xl;
+      font-weight: $fw-bold;
+      color: $color-text-primary;
+      margin-bottom: $space-3;
+
+      span {
+        @include gradient-text;
+      }
+    }
+
+    &__tagline {
+      @include body-text;
+    }
+
+    &__links {
+      display: flex;
+      gap: $space-12;
+      flex-wrap: wrap;
+    }
+
+    &__link-group {
+      display: flex;
+      flex-direction: column;
+      gap: $space-3;
+
+      h4 {
+        font-family: $font-heading;
+        font-size: $fs-sm;
+        font-weight: $fw-semibold;
+        color: $color-text-primary;
+        text-transform: uppercase;
+        letter-spacing: $ls-wider;
+        margin-bottom: $space-2;
+      }
+
+      a {
+        font-size: $fs-sm;
+        color: $color-text-secondary;
+        transition: color $transition-fast;
+
+        &:hover {
+          color: $color-accent-emerald;
+        }
+      }
+    }
+
+    &__thank-you {
+      text-align: center;
+      padding: $space-12 0;
+
+      &-title {
+        font-family: $font-heading;
+        font-size: $fs-4xl;
+        font-weight: $fw-bold;
+        color: $color-text-primary;
+        margin-bottom: $space-4;
+      }
+
+      &-text {
+        @include body-text($fs-md);
+        max-width: 600px;
+        margin-inline: auto;
+      }
+    }
+
+    &__bottom {
+      @include flex-between;
+      flex-wrap: wrap;
+      gap: $space-4;
+      padding-top: $space-8;
+    }
+
+    &__copyright {
+      font-size: $fs-sm;
+      color: $color-text-muted;
+    }
+
+    &__social {
+      display: flex;
+      gap: $space-4;
+
+      &-link {
+        @include flex-center;
+        width: 40px;
+        height: 40px;
+        border-radius: $radius-full;
+        border: 1px solid $color-border;
+        color: $color-text-secondary;
+        transition: all $transition-base;
+
+        &:hover {
+          border-color: $color-accent-emerald;
+          color: $color-accent-emerald;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+</style>

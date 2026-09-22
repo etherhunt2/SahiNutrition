@@ -1,0 +1,213 @@
+// ============================================
+// Sahi Nutrition — SCSS Mixins
+// ============================================
+@use 'variables' as *;
+
+
+// --- Responsive Breakpoints ---
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (min-width: $bp-sm) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: $bp-md) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: $bp-lg) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: $bp-xl) { @content; }
+  } @else if $breakpoint == '2xl' {
+    @media (min-width: $bp-2xl) { @content; }
+  }
+}
+
+@mixin max-width($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (max-width: ($bp-sm - 1px)) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (max-width: ($bp-md - 1px)) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (max-width: ($bp-lg - 1px)) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (max-width: ($bp-xl - 1px)) { @content; }
+  }
+}
+
+// --- Layout ---
+@mixin container($max: $container-max) {
+  width: 100%;
+  max-width: $max;
+  margin-inline: auto;
+  padding-inline: $space-6;
+
+  @include respond-to('lg') {
+    padding-inline: $space-8;
+  }
+}
+
+@mixin section-padding {
+  padding-block: $section-padding;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin grid-auto($min: 300px, $gap: $space-8) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min, 1fr));
+  gap: $gap;
+}
+
+// --- Visual Effects ---
+@mixin glass($bg: rgba(255, 255, 255, 0.04), $blur: 20px) {
+  background: $bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $color-border;
+}
+
+@mixin gradient-text($gradient: $gradient-text) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@mixin glow($color: $color-accent-emerald, $intensity: 0.2) {
+  box-shadow: 0 0 30px rgba($color, $intensity), 0 0 60px rgba($color, $intensity * 0.5);
+}
+
+@mixin card-base {
+  background: $color-bg-card;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-8;
+  transition: all $transition-base;
+
+  &:hover {
+    border-color: $color-border-hover;
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+@mixin button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  padding: $space-4 $space-8;
+  background: $gradient-cta;
+  color: $color-bg-primary;
+  font-family: $font-heading;
+  font-weight: $fw-semibold;
+  font-size: $fs-base;
+  border: none;
+  border-radius: $radius-full;
+  cursor: pointer;
+  transition: all $transition-base;
+  text-decoration: none;
+  letter-spacing: $ls-wide;
+  text-transform: uppercase;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-glow-emerald;
+    filter: brightness(1.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@mixin button-outline {
+  @include button-primary;
+  background: transparent;
+  color: $color-accent-emerald;
+  border: 2px solid $color-accent-emerald;
+
+  &:hover {
+    background: rgba($color-accent-emerald, 0.1);
+  }
+}
+
+// --- Typography ---
+@mixin heading($size: $fs-3xl) {
+  font-family: $font-heading;
+  font-size: $size;
+  font-weight: $fw-bold;
+  line-height: $lh-tight;
+  color: $color-text-primary;
+  letter-spacing: $ls-tight;
+}
+
+@mixin section-label {
+  font-family: $font-heading;
+  font-size: $fs-sm;
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+  letter-spacing: $ls-widest;
+  color: $color-accent-emerald;
+  margin-bottom: $space-4;
+}
+
+@mixin body-text($size: $fs-base) {
+  font-family: $font-body;
+  font-size: $size;
+  font-weight: $fw-regular;
+  line-height: $lh-relaxed;
+  color: $color-text-secondary;
+}
+
+// --- Animations ---
+@mixin fade-in-up {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+@mixin fade-in-left {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+@mixin fade-in-right {
+  opacity: 0;
+  transform: translateX(40px);
+}
+
+@mixin pulse-animation($color: $color-accent-emerald) {
+  @keyframes pulse-ring {
+    0% {
+      box-shadow: 0 0 0 0 rgba($color, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 15px rgba($color, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba($color, 0);
+    }
+  }
+  animation: pulse-ring 2s infinite;
+}
+
+// --- Scrollbar ---
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: $color-bg-secondary;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $color-accent-emerald-dark;
+    border-radius: $radius-full;
+  }
+}

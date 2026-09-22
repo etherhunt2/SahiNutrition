@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import logoImg from '../../assets/images/logo.jpg';
+
+// If already logged in, redirect to dashboard
+if (Astro.cookies.has('admin_session')) {
+  return Astro.redirect('/admin');
+}
+---
+
+<BaseLayout title="Admin Login">
+  <div class="login-page">
+    <div class="login-card">
+      <div class="login-card__header">
+        <Image src={logoImg} alt="Sahi Nutrition" width={140} height={50} class="login-card__logo" />
+        <h2>Admin Login</h2>
+      </div>
+      
+      <form id="login-form" class="login-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required class="form-input" />
+        </div>
+        <p id="error-message" class="error-msg"></p>
+        <button type="submit" class="btn-primary login-btn">Login</button>
+      </form>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('login-form');
+  const errorMsg = document.getElementById('error-message');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (errorMsg) errorMsg.textContent = '';
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        window.location.href = '/admin';
+      } else {
+        const errData = await res.json();
+        if (errorMsg) errorMsg.textContent = errData.error || 'Login failed';
+      }
+    } catch (err) {
+      if (errorMsg) errorMsg.textContent = 'An error occurred';
+    }
+  });
+</script>
+
+<style lang="scss">
+  .login-page {
+    min-height: 100vh;
+    @include flex-center;
+    background: $color-bg-primary;
+  }
+
+  .login-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $radius-lg;
+    padding: $space-10;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+    &__header {
+      text-align: center;
+      margin-bottom: $space-8;
+
+      h2 {
+        font-family: $font-heading;
+        color: $color-text-primary;
+        margin-top: $space-4;
+      }
+    }
+
+    &__logo {
+      height: 50px;
+      object-fit: contain;
+    }
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    label {
+      font-size: $fs-sm;
+      color: $color-text-secondary;
+    }
+  }
+
+  .form-input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: $radius-md;
+    padding: $space-3 $space-4;
+    color: $color-text-primary;
+    font-family: $font-body;
+    transition: border-color $transition-fast;
+
+    &:focus {
+      outline: none;
+      border-color: $color-accent-emerald;
+    }
+  }
+
+  .error-msg {
+    color: #ef4444;
+    font-size: $fs-sm;
+    text-align: center;
+    min-height: 20px;
+  }
+
+  .login-btn {
+    width: 100%;
+    justify-content: center;
+  }
+</style>

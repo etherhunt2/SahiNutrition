@@ -1,0 +1,242 @@
+---
+import { Image } from 'astro:assets';
+import logoImg from '../assets/images/logo.jpg';
+
+interface Props {
+  showAdminLogin?: boolean;
+}
+
+const { showAdminLogin = false } = Astro.props;
+---
+
+<nav class="navbar" id="navbar">
+  <div class="navbar__inner container--wide">
+    <a href="#" class="navbar__logo" aria-label="Sahi Nutrition Home">
+      <Image src={logoImg} alt="Sahi Nutrition" width={140} height={50} class="navbar__logo-img" />
+    </a>
+
+    <ul class="navbar__links" id="nav-links">
+      <li><a href="/#hero" class="navbar__link">Home</a></li>
+      <li><a href="/#why-suffering" class="navbar__link">Why?</a></li>
+      <li><a href="/#look-fit" class="navbar__link">Transform</a></li>
+      <li><a href="/#solution" class="navbar__link">Solution</a></li>
+      <li><a href="/#who-we-are" class="navbar__link">About</a></li>
+      <li><a href="/blog" class="navbar__link">Blog</a></li>
+      <li><a href="/#success" class="navbar__link">Results</a></li>
+      <li><a href="/#aim" class="navbar__link">Your AIM</a></li>
+    </ul>
+
+    <div style="display: flex; gap: 1rem; align-items: center;">
+      {showAdminLogin && (
+        <a href="/admin/login" class="navbar__link" style="color: #10b981;">Admin Login</a>
+      )}
+      <a href="/#contact" class="navbar__cta btn-primary">Get Started</a>
+    </div>
+
+    <button class="navbar__hamburger" id="nav-hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="navbar__mobile" id="mobile-menu">
+    <ul class="navbar__mobile-links">
+      <li><a href="/#hero" class="navbar__link">Home</a></li>
+      <li><a href="/#why-suffering" class="navbar__link">Why?</a></li>
+      <li><a href="/#look-fit" class="navbar__link">Transform</a></li>
+      <li><a href="/#solution" class="navbar__link">Solution</a></li>
+      <li><a href="/#who-we-are" class="navbar__link">About</a></li>
+      <li><a href="/blog" class="navbar__link">Blog</a></li>
+      <li><a href="/#success" class="navbar__link">Results</a></li>
+      <li><a href="/#aim" class="navbar__link">Your AIM</a></li>
+      {showAdminLogin && (
+        <li><a href="/admin/login" class="navbar__link" style="color: #10b981;">Admin Login</a></li>
+      )}
+      <li><a href="/#contact" class="btn-primary" style="margin-top: 1rem;">Get Started</a></li>
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  const closeMenu = () => {
+    hamburger?.classList.remove('active');
+    mobileMenu?.classList.remove('active');
+    document.body.classList.remove('menu-open');
+  };
+
+  hamburger?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hamburger.classList.toggle('active');
+    mobileMenu?.classList.toggle('active');
+    document.body.classList.toggle('menu-open');
+  });
+
+  // Close menu on link click
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      closeMenu();
+    });
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+</script>
+
+<style lang="scss">
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: $z-nav;
+    padding: $space-4 0;
+    transition: all $transition-base;
+
+    &--scrolled {
+      @include glass(rgba(10, 10, 10, 0.85), 20px);
+      padding: $space-3 0;
+      box-shadow: 0 1px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    &__inner {
+      @include flex-between;
+      gap: $space-6;
+    }
+
+    &__logo {
+      flex-shrink: 0;
+
+      &-img {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+      }
+    }
+
+    &__links {
+      display: none;
+      gap: $space-6;
+
+      @include respond-to('lg') {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    &__link {
+      font-family: $font-heading;
+      font-size: $fs-sm;
+      font-weight: $fw-medium;
+      color: $color-text-secondary;
+      text-transform: uppercase;
+      letter-spacing: $ls-wide;
+      transition: color $transition-fast;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: $gradient-primary;
+        transition: width $transition-base;
+      }
+
+      &:hover {
+        color: $color-text-primary;
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+
+    &__cta {
+      display: none;
+      font-size: $fs-sm;
+      padding: $space-3 $space-6;
+
+      @include respond-to('lg') {
+        display: inline-flex;
+      }
+    }
+
+    &__hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: $space-2;
+
+      @include respond-to('lg') {
+        display: none !important;
+      }
+
+      span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: $color-text-primary;
+        transition: all $transition-base;
+        transform-origin: center;
+      }
+
+      &.active {
+        span:nth-child(1) {
+          transform: rotate(45deg) translate(5px, 5px);
+        }
+        span:nth-child(2) {
+          opacity: 0;
+        }
+        span:nth-child(3) {
+          transform: rotate(-45deg) translate(5px, -5px);
+        }
+      }
+    }
+
+    &__mobile {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba($color-bg-primary, 0.98);
+      backdrop-filter: blur(24px);
+      z-index: $z-nav - 1;
+      @include flex-center;
+
+      &.active {
+        display: flex;
+      }
+
+      @include respond-to('lg') {
+        display: none !important;
+      }
+
+      &-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $space-8;
+
+        .navbar__link {
+          font-size: $fs-xl;
+        }
+      }
+    }
+  }
+
+  :global(body.menu-open) {
+    overflow: hidden;
+  }
+</style>
+

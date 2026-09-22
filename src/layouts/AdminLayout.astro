@@ -1,0 +1,119 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { Home, FileText, Settings, LogOut } from 'lucide-react';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<BaseLayout title={`Admin - ${title}`}>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar__header">
+        <h2>Admin Panel</h2>
+      </div>
+      <nav class="admin-sidebar__nav">
+        <a href="/admin" class="admin-sidebar__link"><Home size={20} /> Dashboard</a>
+        <a href="/admin/manage-blogs" class="admin-sidebar__link"><FileText size={20} /> Manage Blogs</a>
+        <a href="/admin/add-blog" class="admin-sidebar__link"><FileText size={20} /> Add Blog</a>
+        <a href="/admin/comments" class="admin-sidebar__link"><FileText size={20} /> Comments</a>
+        <a href="/admin/settings" class="admin-sidebar__link"><Settings size={20} /> Settings</a>
+        <button id="logout-btn" class="admin-sidebar__link admin-sidebar__link--logout"><LogOut size={20} /> Logout</button>
+      </nav>
+    </aside>
+    <main class="admin-content">
+      <slot />
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    try {
+      const res = await fetch('/api/auth/logout', { method: 'POST' });
+      if (res.ok) {
+        window.location.href = '/admin/login';
+      }
+    } catch (err) {
+      console.error('Logout failed', err);
+    }
+  });
+</script>
+
+<style lang="scss">
+  .admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #050505;
+  }
+
+  .admin-sidebar {
+    width: 250px;
+    background: #0a0a0a;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+      padding: $space-6;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      h2 {
+        color: $color-accent-emerald-light;
+        font-family: $font-heading;
+        font-size: $fs-xl;
+        text-transform: uppercase;
+        letter-spacing: $ls-wide;
+      }
+    }
+
+    &__nav {
+      display: flex;
+      flex-direction: column;
+      padding: $space-4;
+      gap: $space-2;
+    }
+
+    &__link {
+      display: flex;
+      align-items: center;
+      gap: $space-3;
+      padding: $space-3 $space-4;
+      color: $color-text-secondary;
+      text-decoration: none;
+      border-radius: $radius-md;
+      transition: all $transition-fast;
+      background: transparent;
+      border: none;
+      font-size: $fs-base;
+      cursor: pointer;
+      text-align: left;
+      font-family: $font-body;
+
+      &:hover, &.active {
+        background: rgba(255, 255, 255, 0.05);
+        color: $color-text-primary;
+      }
+
+      &--logout {
+        margin-top: auto;
+        color: #ef4444;
+
+        &:hover {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+        }
+      }
+    }
+  }
+
+  .admin-content {
+    flex: 1;
+    padding: $space-8;
+    overflow-y: auto;
+    height: 100vh;
+  }
+</style>

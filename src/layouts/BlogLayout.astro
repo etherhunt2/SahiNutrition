@@ -1,0 +1,134 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import FooterSection from '../components/FooterSection.astro';
+import { readJson } from '../utils/jsonDb';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Sahi Nutrition Blog" } = Astro.props;
+
+// Fetch some categories or recent posts for the sidebar
+let blogs: any[] = [];
+try {
+  blogs = await readJson<any[]>('blogs.json');
+} catch (e) {
+  blogs = [];
+}
+
+const recentPosts = [...blogs].reverse().slice(0, 5);
+const categories = Array.from(new Set(blogs.map(b => b.category || 'Uncategorized')));
+---
+
+<BaseLayout title={title} description={description}>
+  <Navbar showAdminLogin={true} />
+  
+  <main class="blog-layout">
+    <div class="container--wide blog-layout__inner">
+      <div class="blog-layout__content">
+        <slot />
+      </div>
+      
+      <aside class="blog-layout__sidebar">
+        <div class="widget">
+          <h3 class="widget__title">Recent Posts</h3>
+          <ul class="widget__list">
+            {recentPosts.length > 0 ? recentPosts.map((post) => (
+              <li>
+                <a href={`/blog/${post.slug}`} class="widget__link">{post.title}</a>
+              </li>
+            )) : (
+              <li><span class="widget__link" style="opacity: 0.5;">No posts yet</span></li>
+            )}
+          </ul>
+        </div>
+
+        <div class="widget">
+          <h3 class="widget__title">Categories</h3>
+          <ul class="widget__list">
+            {categories.length > 0 ? categories.map((cat) => (
+              <li>
+                <a href={`/blog?category=${cat}`} class="widget__link">{cat}</a>
+              </li>
+            )) : (
+              <li><span class="widget__link" style="opacity: 0.5;">No categories</span></li>
+            )}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+  
+  <FooterSection />
+</BaseLayout>
+
+<style lang="scss">
+  .blog-layout {
+    padding-top: calc(80px + $space-8);
+    padding-bottom: $space-16;
+    min-height: 100vh;
+    background-color: $color-bg-primary;
+
+    &__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: $space-8;
+
+      @include respond-to('lg') {
+        grid-template-columns: 3fr 1fr;
+        gap: $space-12;
+      }
+    }
+
+    &__content {
+      min-width: 0; // Prevent flex/grid overflow
+    }
+
+    &__sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: $space-8;
+    }
+  }
+
+  .widget {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $radius-lg;
+    padding: $space-6;
+
+    &__title {
+      font-family: $font-heading;
+      font-size: $fs-lg;
+      color: $color-accent-emerald-light;
+      margin-bottom: $space-4;
+      text-transform: uppercase;
+      letter-spacing: $ls-wide;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: $space-2;
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      gap: $space-3;
+
+      li {
+        line-height: 1.4;
+      }
+    }
+
+    &__link {
+      color: $color-text-secondary;
+      transition: color $transition-fast;
+      font-size: $fs-base;
+
+      &:hover {
+        color: $color-text-primary;
+      }
+    }
+  }
+</style>

@@ -1,0 +1,130 @@
+---
+---
+
+<section class="ready section" id="ready">
+  <div class="ready__bg">
+    <div class="ready__glow ready__glow--1"></div>
+    <div class="ready__glow ready__glow--2"></div>
+    <div class="ready__glow ready__glow--3"></div>
+  </div>
+
+  <div class="ready__content container">
+    <h2 class="ready__title">
+      ARE YOU READY FOR THE NEXT STEP?
+    </h2>
+    <p class="ready__subtitle gsap-fade-up">
+      Your transformation starts with a single decision.
+    </p>
+    <a href="#contact" class="btn-gold ready__cta gsap-scale-in">
+      Yes, I'm Ready
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<style lang="scss">
+  .ready {
+    padding: clamp(4rem, 8vw, 8rem) 0;
+    @include flex-center;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    background: $color-bg-primary;
+
+    &__bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    &__glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.15;
+
+      &--1 {
+        width: 400px;
+        height: 400px;
+        background: $color-accent-emerald;
+        top: 10%;
+        left: 10%;
+        animation: float-glow-1 8s ease-in-out infinite;
+      }
+
+      &--2 {
+        width: 350px;
+        height: 350px;
+        background: $color-accent-gold;
+        bottom: 10%;
+        right: 10%;
+        animation: float-glow-2 10s ease-in-out infinite;
+      }
+
+      &--3 {
+        width: 300px;
+        height: 300px;
+        background: $color-accent-emerald-dark;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: float-glow-3 12s ease-in-out infinite;
+      }
+    }
+
+    &__content {
+      position: relative;
+      z-index: $z-base;
+      text-align: center;
+      @include flex-center;
+      flex-direction: column;
+      gap: $space-8;
+    }
+
+    &__title {
+      font-family: $font-display;
+      font-size: $fs-display;
+      font-weight: $fw-black;
+      line-height: 1;
+      text-transform: uppercase;
+      text-align: center;
+      max-width: 900px;
+
+      // Each word gets animated independently by GSAP
+      :global(.ready__word) {
+        display: inline-block;
+        margin-right: 0.25em;
+        perspective: 800px;
+        @include gradient-text($gradient-text);
+      }
+    }
+
+    &__subtitle {
+      @include body-text($fs-xl);
+      max-width: 500px;
+    }
+
+    &__cta {
+      font-size: $fs-lg;
+      padding: $space-5 $space-10;
+      margin-top: $space-4;
+    }
+  }
+
+  @keyframes float-glow-1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -20px); }
+  }
+
+  @keyframes float-glow-2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-20px, 30px); }
+  }
+
+  @keyframes float-glow-3 {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.2); }
+  }
+</style>

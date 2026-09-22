@@ -1,0 +1,286 @@
+---
+import { Image } from "astro:assets";
+import heroImg from "../assets/images/hero-transformation.jpg";
+---
+
+<section class="hero section" id="hero">
+  <!-- Background glow effects -->
+  <div class="hero__glow hero__glow--left"></div>
+  <div class="hero__glow hero__glow--right"></div>
+
+  <div class="hero__content container">
+    <div class="hero__text">
+      <span class="hero__label section__label"
+        >Sahi Nutrition — Transform Your Life</span
+      >
+
+      <h1 class="hero__title">
+        Transform Your Body<br />
+        <span class="text-gradient">for Best Life.</span>
+      </h1>
+
+      <p class="hero__subtitle">
+        We help people struggling with <strong>underweight</strong> and <strong
+          >obesity
+        </strong>
+        transform their lives through personalized diet plans, expert guidance, and
+        sustainable lifestyle changes. No crash diets. No shortcuts. Just science.
+      </p>
+
+      <div class="hero__cta">
+        <a href="#look-fit" class="btn-primary">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+          See Your Transformation
+        </a>
+        <a href="#aim" class="btn-outline">Set Your Goal</a>
+      </div>
+
+      <div class="hero__stats">
+        <div class="hero__stat">
+          <span class="hero__stat-number">800+</span>
+          <span class="hero__stat-label">Lives Changed</span>
+        </div>
+        <div class="hero__stat-divider"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-number">94%</span>
+          <span class="hero__stat-label">Success Rate</span>
+        </div>
+        <div class="hero__stat-divider"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-number">12+</span>
+          <span class="hero__stat-label">Years Experience</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__image">
+      <div class="hero__image-wrapper">
+        <Image
+          src={heroImg}
+          alt="Body transformation — from struggle to strength"
+          width={700}
+          height={450}
+          class="hero__img"
+          loading="eager"
+        />
+        <div class="hero__image-badge">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+            ></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+          <span>Real Transformations</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero__scroll-indicator">
+    <span>Scroll to explore</span>
+    <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+      <rect
+        x="1"
+        y="1"
+        width="14"
+        height="22"
+        rx="7"
+        stroke="currentColor"
+        stroke-width="1.5"></rect>
+      <circle cx="8" cy="8" r="2" fill="currentColor" class="hero__scroll-dot"
+      ></circle>
+    </svg>
+  </div>
+</section>
+
+<style lang="scss">
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 100px;
+    position: relative;
+    overflow: hidden;
+
+    &__glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+
+      &--left {
+        top: -100px;
+        left: -200px;
+        background: rgba($color-accent-emerald, 0.08);
+      }
+
+      &--right {
+        bottom: -100px;
+        right: -200px;
+        background: rgba($color-accent-gold, 0.06);
+      }
+    }
+
+    &__content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: $space-12;
+      align-items: center;
+
+      @include respond-to("lg") {
+        grid-template-columns: 1fr 1fr;
+        gap: $space-16;
+      }
+    }
+
+    &__text {
+      order: 2;
+
+      @include respond-to("lg") {
+        order: 1;
+      }
+    }
+
+    &__title {
+      @include heading($fs-hero);
+      margin-bottom: $space-6;
+      line-height: 1.05;
+
+      .text-gradient {
+        display: inline-block;
+      }
+    }
+
+    &__subtitle {
+      @include body-text($fs-lg);
+      margin-bottom: $space-10;
+      max-width: 540px;
+
+      strong {
+        color: $color-text-primary;
+        font-weight: $fw-semibold;
+      }
+    }
+
+    &__cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $space-4;
+      margin-bottom: $space-12;
+    }
+
+    &__stats {
+      display: flex;
+      align-items: center;
+      gap: $space-6;
+      flex-wrap: wrap;
+    }
+
+    &__stat {
+      text-align: center;
+
+      &-number {
+        display: block;
+        font-family: $font-heading;
+        font-size: $fs-2xl;
+        font-weight: $fw-bold;
+        @include gradient-text;
+      }
+
+      &-label {
+        font-size: $fs-xs;
+        color: $color-text-muted;
+        text-transform: uppercase;
+        letter-spacing: $ls-wider;
+      }
+
+      &-divider {
+        width: 1px;
+        height: 40px;
+        background: $color-border;
+      }
+    }
+
+    &__image {
+      order: 1;
+
+      @include respond-to("lg") {
+        order: 2;
+      }
+
+      &-wrapper {
+        position: relative;
+        border-radius: $radius-xl;
+        overflow: hidden;
+        box-shadow: $shadow-xl;
+        border: 1px solid $color-border;
+      }
+
+      &-badge {
+        position: absolute;
+        bottom: $space-4;
+        left: $space-4;
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        @include glass(rgba(10, 10, 10, 0.7), 12px);
+        border-radius: $radius-full;
+        padding: $space-2 $space-4;
+        font-size: $fs-xs;
+        font-weight: $fw-medium;
+        color: $color-accent-emerald-light;
+
+        svg {
+          flex-shrink: 0;
+        }
+      }
+    }
+
+    &__img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    &__scroll-indicator {
+      position: absolute;
+      bottom: $space-8;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: $space-2;
+      color: $color-text-muted;
+      font-size: $fs-xs;
+      text-transform: uppercase;
+      letter-spacing: $ls-wider;
+
+      @include max-width("md") {
+        display: none;
+      }
+    }
+  }
+</style>

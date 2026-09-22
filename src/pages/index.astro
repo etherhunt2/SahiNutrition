@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import HeroSection from "../components/HeroSection.astro";
+import WhySufferingSection from "../components/WhySufferingSection.astro";
+import SolutionSection from "../components/SolutionSection.astro";
+import WhoWeAreSection from "../components/WhoWeAreSection.astro";
+import HowCanIHelpSection from "../components/HowCanIHelpSection.astro";
+import ReadySection from "../components/ReadySection.astro";
+import FooterSection from "../components/FooterSection.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
+
+// React Interactive Components
+import PhotoTransform from "../components/react/PhotoTransform";
+import SuccessStorySection from "../components/react/SuccessStorySection";
+import AimCalculator from "../components/react/AimCalculator";
+import ContactForm from "../components/react/ContactForm";
+import ThreeBackground from "../components/react/ThreeBackground";
+---
+
+<BaseLayout>
+  <!-- 3D Background (fixed, behind everything) -->
+  <ThreeBackground client:only="react" />
+
+  <!-- Navigation -->
+  <Navbar />
+
+  <!-- Main Content (z-index above 3D bg) -->
+  <main style="position: relative; z-index: 1;">
+    <!-- 1. Hero — Grab Attention -->
+    <HeroSection />
+
+    <hr class="section-divider" />
+
+    <!-- 2. Why Are You Suffering? — Pain Points -->
+    <WhySufferingSection />
+
+    <hr class="section-divider" />
+
+    <!-- 3. Want to Look Fit? — AI Photo Transform -->
+    <PhotoTransform client:visible />
+
+    <hr class="section-divider" />
+
+    <!-- 4. The Solution — 3 Step Process -->
+    <SolutionSection />
+
+    <hr class="section-divider" />
+
+    <!-- 5. Who We Are — Coach Introduction -->
+    <WhoWeAreSection />
+
+    <hr class="section-divider" />
+
+    <!-- 6. How Can I Help You? — Services -->
+    <HowCanIHelpSection />
+
+    <hr class="section-divider" />
+
+    <!-- 7. Our Success Story — Stats & Charts -->
+    <SuccessStorySection client:visible />
+
+    <hr class="section-divider" />
+
+    <!-- 8. What Is Your AIM? — Interactive Calculator -->
+    <AimCalculator client:visible />
+
+    <hr class="section-divider" />
+
+    <!-- 9. Are You Ready? — Full Screen CTA -->
+    <ReadySection />
+
+    <!-- 10. Contact Form -->
+    <ContactForm client:visible />
+
+    <!-- 11. Thank You / Footer -->
+    <FooterSection />
+  </main>
+
+  <!-- Sticky WhatsApp Button -->
+  <WhatsAppButton />
+</BaseLayout>

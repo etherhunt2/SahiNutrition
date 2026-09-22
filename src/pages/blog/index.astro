@@ -1,0 +1,225 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { readJson } from '../../utils/jsonDb';
+let blogs = [];
+try {
+  blogs = await readJson('blogs.json');
+} catch (e) {
+  console.error("Error reading blogs:", e);
+}
+---
+
+<BlogLayout title="Blog" description="Read our latest nutrition, health, and transformation tips.">
+  <div class="blog-page">
+    <header class="blog-header">
+      <h1 class="blog-header__title">Our <span>Blog</span></h1>
+      <p class="blog-header__subtitle">Insights and tips to help you transform your health.</p>
+      <p>CWD is: {process.cwd()}</p>
+    </header>
+    
+    <div class="blog-grid">
+      {blogs.map(blog => {
+        const isVideo = blog.featuredImage?.match(/\.(mp4|webm|ogg)$/i) || blog.featuredImage?.includes('youtube.com') || blog.featuredImage?.includes('vimeo.com');
+        return (
+          <a href={`/blog/${blog.slug}`} class="blog-card">
+            <div class="blog-card__media">
+              {isVideo && <div class="blog-card__video-indicator">▶</div>}
+              <img src={blog.featuredImage} alt={blog.title} loading="lazy" />
+              <span class="blog-card__category">{blog.category}</span>
+            </div>
+            <div class="blog-card__content">
+              <span class="blog-card__date">
+                {new Date(blog.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </span>
+              <h2 class="blog-card__title">{blog.title}</h2>
+              <p class="blog-card__excerpt">{blog.excerpt}</p>
+              <span class="blog-card__read-more">Read More →</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</BlogLayout>
+
+<style lang="scss">
+  .blog-page {
+    display: flex;
+    flex-direction: column;
+    gap: $space-10;
+  }
+
+  .blog-header {
+    text-align: center;
+    @include respond-to('lg') {
+      text-align: left;
+    }
+
+    &__title {
+      font-family: $font-heading;
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: $fw-black;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: $space-4;
+
+      span {
+        @include gradient-text($gradient-text);
+      }
+    }
+
+    &__subtitle {
+      font-size: $fs-lg;
+      color: $color-text-secondary;
+      max-width: 600px;
+    }
+  }
+</style>
+
+<style is:global lang="scss">
+  // Global styles for BlogCard and BlogList React components
+  .blog-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-8;
+
+    @include respond-to('md') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $radius-lg;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all $transition-base;
+    height: 100%;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border-color: rgba(16, 185, 129, 0.5);
+      background: rgba(255, 255, 255, 0.05);
+
+      .blog-card__media img {
+        transform: scale(1.05);
+      }
+      
+      .blog-card__read-more {
+        color: $color-accent-emerald;
+      }
+    }
+
+    &__media {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform $transition-slow;
+      }
+    }
+
+    &__video-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.6);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      z-index: 2;
+    }
+
+    &__category {
+      position: absolute;
+      top: $space-4;
+      left: $space-4;
+      background: $gradient-primary;
+      color: $color-bg-primary;
+      padding: $space-1 $space-3;
+      border-radius: $radius-full;
+      font-size: $fs-xs;
+      font-weight: $fw-bold;
+      text-transform: uppercase;
+      letter-spacing: $ls-wide;
+      z-index: 2;
+    }
+
+    &__content {
+      padding: $space-6;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    &__date {
+      font-size: $fs-sm;
+      color: $color-text-secondary;
+      margin-bottom: $space-2;
+    }
+
+    &__title {
+      font-family: $font-heading;
+      font-size: $fs-xl;
+      color: $color-text-primary;
+      margin-bottom: $space-3;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    &__excerpt {
+      color: $color-text-secondary;
+      font-size: $fs-base;
+      margin-bottom: $space-6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    &__read-more {
+      font-size: $fs-sm;
+      color: $color-text-secondary;
+      font-weight: $fw-medium;
+      text-transform: uppercase;
+      letter-spacing: $ls-wide;
+      transition: color $transition-fast;
+    }
+  }
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: $space-8 0;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(16, 185, 129, 0.2);
+    border-radius: 50%;
+    border-top-color: $color-accent-emerald;
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>

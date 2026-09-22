@@ -1,0 +1,48 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import BlogForm from '../../components/react/admin/BlogForm';
+
+if (!Astro.cookies.has('admin_session')) {
+  return Astro.redirect('/admin/login');
+}
+---
+
+<AdminLayout title="Add New Blog">
+  <header class="admin-header">
+    <div class="admin-header__content">
+      <h1>Add New Blog</h1>
+    </div>
+  </header>
+
+  <section class="admin-content">
+    <BlogForm client:load />
+  </section>
+</AdminLayout>
+
+<style lang="scss">
+  .admin-header {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: $space-6 $space-8;
+
+    &__content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+
+      h1 {
+        font-family: $font-heading;
+        font-size: $fs-2xl;
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  .admin-content {
+    padding: $space-8;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+</style>

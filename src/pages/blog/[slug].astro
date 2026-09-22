@@ -1,0 +1,180 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import CommentSection from '../../components/react/CommentSection';
+import { readJson } from '../../utils/jsonDb';
+
+const { slug } = Astro.params;
+
+let blogs = [];
+try {
+  blogs = await readJson('blogs.json');
+} catch (e) {}
+
+// Find the blog in the static JSON data
+const blog = blogs.find(b => b.slug === slug);
+
+if (!blog) {
+  return Astro.redirect('/404');
+}
+
+const isVideo = blog.featuredImage?.match(/\.(mp4|webm|ogg)$/i) || blog.featuredImage?.includes('youtube.com') || blog.featuredImage?.includes('vimeo.com');
+---
+
+<BlogLayout title={blog.title} description={blog.excerpt}>
+  <article class="blog-post">
+    <header class="blog-post__header">
+      <div class="blog-post__meta">
+        <span class="blog-post__category">{blog.category}</span>
+        <span class="blog-post__date">{new Date(blog.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+      </div>
+      <h1 class="blog-post__title">{blog.title}</h1>
+    </header>
+
+    {blog.featuredImage && (
+      <div class="blog-post__media">
+        {isVideo && blog.featuredImage.includes('youtube.com') ? (
+          <iframe 
+            src={blog.featuredImage.replace('watch?v=', 'embed/')} 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        ) : isVideo ? (
+          <video src={blog.featuredImage} controls preload="metadata"></video>
+        ) : (
+          <img src={blog.featuredImage} alt={blog.title} />
+        )}
+      </div>
+    )}
+
+    <div class="blog-post__content" set:html={blog.content}></div>
+
+    <CommentSection blogId={blog.id} client:only="react" />
+  </article>
+</BlogLayout>
+
+<style lang="scss">
+  .blog-post {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $radius-lg;
+    overflow: hidden;
+
+    &__header {
+      padding: $space-8 $space-8 $space-6;
+    }
+
+    &__meta {
+      display: flex;
+      align-items: center;
+      gap: $space-4;
+      margin-bottom: $space-4;
+    }
+
+    &__category {
+      background: $gradient-primary;
+      color: $color-bg-primary;
+      padding: $space-1 $space-3;
+      border-radius: $radius-full;
+      font-size: $fs-xs;
+      font-weight: $fw-bold;
+      text-transform: uppercase;
+      letter-spacing: $ls-wide;
+    }
+
+    &__date {
+      color: $color-text-secondary;
+      font-size: $fs-sm;
+    }
+
+    &__title {
+      font-family: $font-heading;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: $color-text-primary;
+      line-height: 1.2;
+    }
+
+    &__media {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+
+      img, video, iframe {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &__content {
+      padding: $space-8;
+      color: $color-text-secondary;
+      font-size: $fs-lg;
+      line-height: 1.8;
+
+      /* Styling the HTML content from React Quill */
+      :global(h1), :global(h2), :global(h3), :global(h4) {
+        color: $color-text-primary;
+        font-family: $font-heading;
+        margin-top: 2em;
+        margin-bottom: 0.5em;
+        line-height: 1.3;
+      }
+
+      :global(p) {
+        margin-bottom: 1.5em;
+      }
+
+      :global(ul), :global(ol) {
+        margin-bottom: 1.5em;
+        padding-left: 1.5em;
+      }
+
+      :global(li) {
+        margin-bottom: 0.5em;
+      }
+
+      :global(a) {
+        color: $color-accent-emerald;
+        text-decoration: underline;
+
+        &:hover {
+          color: $color-accent-emerald-light;
+        }
+      }
+
+      :global(img) {
+        max-width: 100%;
+        height: auto;
+        border-radius: $radius-md;
+        margin: 2em 0;
+      }
+
+      :global(blockquote) {
+        border-left: 4px solid $color-accent-emerald;
+        padding-left: 1em;
+        margin: 2em 0;
+        font-style: italic;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 1em;
+        border-radius: 0 $radius-md $radius-md 0;
+      }
+
+      :global(pre) {
+        background: rgba(0, 0, 0, 0.5);
+        padding: 1em;
+        border-radius: $radius-md;
+        overflow-x: auto;
+        margin: 1.5em 0;
+      }
+
+      :global(code) {
+        font-family: monospace;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+    }
+  }
+</style>
