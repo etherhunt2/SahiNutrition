@@ -1,0 +1,250 @@
+---
+/**
+ * Language Picker Dialog — shows centered popup on first visit
+ * to let users choose Hindi or English. Remembers choice in localStorage.
+ * Also adds a small toggle button in the top bar for switching later.
+ */
+---
+
+<!-- Language Picker Overlay — hidden by default, shown via JS if no stored preference -->
+<div class="lang-picker-overlay" id="lang-picker-overlay">
+  <div class="lang-picker-dialog" id="lang-picker-dialog">
+    <button class="lang-picker-dialog__close" id="lang-picker-close" aria-label="Close">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"></path>
+      </svg>
+    </button>
+    <div class="lang-picker-dialog__icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </svg>
+    </div>
+    <h2 class="lang-picker-dialog__title">
+      <span data-i18n-key="langPicker.title">Choose Your Language</span>
+    </h2>
+    <p class="lang-picker-dialog__subtitle">
+      अपनी भाषा चुनें / Select your preferred language
+    </p>
+    <div class="lang-picker-dialog__options">
+      <button class="lang-picker-dialog__btn" data-lang="en" id="lang-btn-en">
+        <span class="lang-picker-dialog__btn-flag">🇬🇧</span>
+        <span class="lang-picker-dialog__btn-label">English</span>
+      </button>
+      <button class="lang-picker-dialog__btn" data-lang="hi" id="lang-btn-hi">
+        <span class="lang-picker-dialog__btn-flag">🇮🇳</span>
+        <span class="lang-picker-dialog__btn-label">हिन्दी</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Show the dialog if no language preference is saved
+  const overlay = document.getElementById('lang-picker-overlay');
+  const savedLang = localStorage.getItem('sahi-lang');
+
+  if (!savedLang && overlay) {
+    overlay.classList.add('active');
+    document.body.classList.add('picker-open');
+  } else if (savedLang) {
+    document.documentElement.setAttribute('data-lang', savedLang);
+    window.dispatchEvent(new CustomEvent('lang-change', { detail: savedLang }));
+  }
+
+  // Handle button clicks
+  document.querySelectorAll('.lang-picker-dialog__btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lang = (btn as HTMLElement).dataset.lang;
+      if (!lang) return;
+
+      localStorage.setItem('sahi-lang', lang);
+      document.documentElement.setAttribute('data-lang', lang);
+      window.dispatchEvent(new CustomEvent('lang-change', { detail: lang }));
+
+      // Close dialog safely
+      const overlayEl = document.getElementById('lang-picker-overlay');
+      if (overlayEl) {
+        overlayEl.classList.remove('active');
+        overlayEl.style.display = 'none'; // Force hide just in case
+      }
+      document.body.classList.remove('picker-open');
+
+      // Update all Astro i18n elements
+      updateAstroI18n(lang);
+    });
+  });
+
+  // Handle close button
+  document.getElementById('lang-picker-close')?.addEventListener('click', () => {
+    const overlayEl = document.getElementById('lang-picker-overlay');
+    if (overlayEl) {
+      overlayEl.classList.remove('active');
+      overlayEl.style.display = 'none';
+    }
+    document.body.classList.remove('picker-open');
+    // If they close without selecting, we can default to English so it doesn't bother them again
+    if (!localStorage.getItem('sahi-lang')) {
+      localStorage.setItem('sahi-lang', 'en');
+      window.dispatchEvent(new CustomEvent('lang-change', { detail: 'en' }));
+    }
+  });
+
+  // Listen for language changes from React or the toggle
+  window.addEventListener('lang-change', (e: Event) => {
+    const lang = (e as CustomEvent).detail;
+    updateAstroI18n(lang);
+  });
+
+  function updateAstroI18n(lang: string) {
+    // Update elements with data-en and data-hi attributes
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const text = (el as HTMLElement).dataset[lang as 'en' | 'hi'];
+      if (text) {
+        if ((el as HTMLElement).dataset.html === 'true') {
+          el.innerHTML = text;
+        } else {
+          el.textContent = text;
+        }
+      }
+    });
+  }
+
+  // Run initial update if language is already set
+  if (savedLang) {
+    updateAstroI18n(savedLang);
+  }
+</script>
+
+<style lang="scss">
+  :global(body.picker-open) {
+    overflow: hidden;
+  }
+
+  .lang-picker-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    @include flex-center;
+    animation: lang-overlay-in 0.3s ease;
+
+    &.active {
+      display: flex;
+    }
+  }
+
+  .lang-picker-dialog {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-2xl;
+    padding: $space-10 $space-12;
+    text-align: center;
+    max-width: 480px;
+    width: 90%;
+    animation: lang-dialog-in 0.4s ease 0.1s both;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+    position: relative;
+
+    &__close {
+      position: absolute;
+      top: $space-4;
+      right: $space-4;
+      background: none;
+      border: none;
+      color: $color-text-muted;
+      cursor: pointer;
+      padding: $space-2;
+      border-radius: $radius-md;
+      transition: all 0.2s;
+      
+      &:hover {
+        color: $color-text-primary;
+        background: rgba(255, 255, 255, 0.05);
+      }
+    }
+
+    &__icon {
+      @include flex-center;
+      width: 80px;
+      height: 80px;
+      background: rgba($color-accent-emerald, 0.1);
+      border-radius: $radius-full;
+      margin: 0 auto $space-6;
+      color: $color-accent-emerald;
+    }
+
+    &__title {
+      font-family: $font-heading;
+      font-size: $fs-2xl;
+      font-weight: $fw-bold;
+      color: $color-text-primary;
+      margin-bottom: $space-2;
+    }
+
+    &__subtitle {
+      font-size: $fs-sm;
+      color: $color-text-muted;
+      margin-bottom: $space-8;
+      line-height: $lh-relaxed;
+    }
+
+    &__options {
+      display: flex;
+      gap: $space-4;
+      justify-content: center;
+    }
+
+    &__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: $space-3;
+      padding: $space-6 $space-8;
+      background: rgba($color-bg-primary, 0.6);
+      border: 2px solid $color-border;
+      border-radius: $radius-xl;
+      cursor: pointer;
+      transition: all $transition-base;
+      min-width: 140px;
+
+      &:hover {
+        border-color: $color-accent-emerald;
+        background: rgba($color-accent-emerald, 0.05);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba($color-accent-emerald, 0.15);
+      }
+
+      &-flag {
+        font-size: 2.5rem;
+        line-height: 1;
+      }
+
+      &-label {
+        font-family: $font-heading;
+        font-size: $fs-lg;
+        font-weight: $fw-semibold;
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  @keyframes lang-overlay-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes lang-dialog-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+</style>

@@ -1,4 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
+import { useLang } from '../../i18n/useLang';
+import { translations } from '../../i18n/translations';
 
 type GoalType = 'loss' | 'gain';
 type EffortLevel = 'trial' | 'motivated' | 'dedicated';
@@ -36,6 +38,8 @@ const EFFORT_LEVELS: Record<EffortLevel, EffortConfig> = {
 };
 
 export default function AimCalculator() {
+  const lang = useLang();
+  const tr = translations.aimCalculator;
   const [goalType, setGoalType] = useState<GoalType>('loss');
   const [duration, setDuration] = useState(3);
   const [effort, setEffort] = useState<EffortLevel>('motivated');
@@ -54,23 +58,22 @@ export default function AimCalculator() {
   }, [result, goalType]);
 
   const getMotivationalText = useCallback(() => {
-    if (duration <= 2) return "A great start — every journey begins with the first step!";
-    if (duration <= 4) return "This is where real changes start to show. You'll feel the difference!";
-    if (duration <= 6) return "Half a year of dedication can transform your entire life.";
-    if (duration <= 9) return "With this commitment, you'll become an inspiration to others.";
-    return "A full year of transformation — this is how legends are made!";
-  }, [duration]);
+    if (duration <= 2) return tr.motivation1[lang];
+    if (duration <= 4) return tr.motivation2[lang];
+    if (duration <= 6) return tr.motivation3[lang];
+    if (duration <= 9) return tr.motivation4[lang];
+    return tr.motivation5[lang];
+  }, [duration, lang]);
 
   return (
     <section className="aim-calculator" id="aim">
       <div className="aim-calculator__container">
-        <span className="aim-calculator__label">Interactive Goal Planner</span>
+        <span className="aim-calculator__label">{tr.label[lang]}</span>
         <h2 className="aim-calculator__title">
-          What Is Your <span className="aim-calculator__gradient">AIM?</span>
+          {tr.title[lang]} <span className="aim-calculator__gradient">{tr.titleHighlight[lang]}</span>
         </h2>
         <p className="aim-calculator__subtitle">
-          Set your target and see what's achievable with the right guidance. 
-          Drag the sliders and select your effort level.
+          {tr.subtitle[lang]}
         </p>
 
         <div className="aim-calculator__content">
@@ -78,7 +81,7 @@ export default function AimCalculator() {
           <div className="aim-calculator__controls">
             {/* Goal Type Toggle */}
             <div className="aim-calculator__field">
-              <label className="aim-calculator__field-label">Your Goal</label>
+              <label className="aim-calculator__field-label">{tr.yourGoal[lang]}</label>
               <div className="aim-calculator__goal-toggle">
                 <button
                   className={`aim-calculator__goal-btn ${goalType === 'loss' ? 'active' : ''}`}
@@ -87,7 +90,7 @@ export default function AimCalculator() {
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M18 15l-6-6-6 6"/>
                   </svg>
-                  Weight Loss
+                  {tr.weightLoss[lang]}
                 </button>
                 <button
                   className={`aim-calculator__goal-btn ${goalType === 'gain' ? 'active' : ''}`}
@@ -96,7 +99,7 @@ export default function AimCalculator() {
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M12 5v14M5 12h14"/>
                   </svg>
-                  Weight Gain
+                  {tr.weightGain[lang]}
                 </button>
               </div>
             </div>
@@ -104,8 +107,8 @@ export default function AimCalculator() {
             {/* Duration Slider */}
             <div className="aim-calculator__field">
               <label className="aim-calculator__field-label">
-                Duration
-                <span className="aim-calculator__field-value">{duration} {duration === 1 ? 'Month' : 'Months'}</span>
+                {tr.duration[lang]}
+                <span className="aim-calculator__field-value">{duration} {duration === 1 ? tr.month[lang] : tr.months[lang]}</span>
               </label>
               <input
                 type="range"
@@ -119,15 +122,15 @@ export default function AimCalculator() {
                 }}
               />
               <div className="aim-calculator__slider-labels">
-                <span>1 month</span>
-                <span>6 months</span>
-                <span>12 months</span>
+                <span>{tr.sliderMin[lang]}</span>
+                <span>{tr.sliderMid[lang]}</span>
+                <span>{tr.sliderMax[lang]}</span>
               </div>
             </div>
 
             {/* Effort Level */}
             <div className="aim-calculator__field">
-              <label className="aim-calculator__field-label">Effort Level</label>
+              <label className="aim-calculator__field-label">{tr.effortLevel[lang]}</label>
               <div className="aim-calculator__effort-options">
                 {(Object.entries(EFFORT_LEVELS) as [EffortLevel, EffortConfig][]).map(([key, config]) => (
                   <button
@@ -136,8 +139,8 @@ export default function AimCalculator() {
                     onClick={() => setEffort(key)}
                     style={{ '--effort-color': config.color } as React.CSSProperties}
                   >
-                    <span className="aim-calculator__effort-name">{config.label}</span>
-                    <span className="aim-calculator__effort-desc">{config.description}</span>
+                    <span className="aim-calculator__effort-name">{key === 'trial' ? tr.trial[lang] : key === 'motivated' ? tr.motivated[lang] : tr.dedicated[lang]}</span>
+                    <span className="aim-calculator__effort-desc">{key === 'trial' ? tr.trialDesc[lang] : key === 'motivated' ? tr.motivatedDesc[lang] : tr.dedicatedDesc[lang]}</span>
                   </button>
                 ))}
               </div>
@@ -149,10 +152,10 @@ export default function AimCalculator() {
             <div className="aim-calculator__result-card">
               <div className="aim-calculator__result-header">
                 <span className="aim-calculator__result-type">
-                  {goalType === 'loss' ? 'Expected Weight Loss' : 'Expected Weight Gain'}
+                  {goalType === 'loss' ? tr.expectedLoss[lang] : tr.expectedGain[lang]}
                 </span>
                 <div className="aim-calculator__result-badge" style={{ background: EFFORT_LEVELS[effort].color }}>
-                  {EFFORT_LEVELS[effort].label}
+                  {effort === 'trial' ? tr.trial[lang] : effort === 'motivated' ? tr.motivated[lang] : tr.dedicated[lang]}
                 </div>
               </div>
 
@@ -164,7 +167,7 @@ export default function AimCalculator() {
               </div>
 
               <div className="aim-calculator__result-meta">
-                in {duration} {duration === 1 ? 'month' : 'months'}
+                {tr.in[lang]} {duration} {duration === 1 ? tr.month[lang] : tr.months[lang]}
               </div>
 
               {/* Progress Bar */}
@@ -187,7 +190,7 @@ export default function AimCalculator() {
               {/* Breakdown */}
               <div className="aim-calculator__breakdown">
                 <div className="aim-calculator__breakdown-item">
-                  <span className="aim-calculator__breakdown-label">Per month</span>
+                  <span className="aim-calculator__breakdown-label">{tr.perMonth[lang]}</span>
                   <span className="aim-calculator__breakdown-value">
                     {goalType === 'loss'
                       ? `${EFFORT_LEVELS[effort].lossPerMonth[0]}–${EFFORT_LEVELS[effort].lossPerMonth[1]} kg`
@@ -195,7 +198,7 @@ export default function AimCalculator() {
                   </span>
                 </div>
                 <div className="aim-calculator__breakdown-item">
-                  <span className="aim-calculator__breakdown-label">Per week</span>
+                  <span className="aim-calculator__breakdown-label">{tr.perWeek[lang]}</span>
                   <span className="aim-calculator__breakdown-value">
                     {goalType === 'loss'
                       ? `${(EFFORT_LEVELS[effort].lossPerMonth[0] / 4).toFixed(2)}–${(EFFORT_LEVELS[effort].lossPerMonth[1] / 4).toFixed(2)} kg`
@@ -205,7 +208,7 @@ export default function AimCalculator() {
               </div>
 
               <a href="#contact" className="aim-calculator__cta">
-                Start Your Journey Now
+                {tr.ctaButton[lang]}
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>

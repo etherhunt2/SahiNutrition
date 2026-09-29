@@ -9,6 +9,7 @@ import HowCanIHelpSection from "../components/HowCanIHelpSection.astro";
 import ReadySection from "../components/ReadySection.astro";
 import FooterSection from "../components/FooterSection.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
+import LanguagePicker from "../components/LanguagePicker.astro";
 
 // React Interactive Components
 import PhotoTransform from "../components/react/PhotoTransform";
@@ -19,6 +20,9 @@ import ThreeBackground from "../components/react/ThreeBackground";
 ---
 
 <BaseLayout>
+  <!-- Language Picker Dialog -->
+  <LanguagePicker />
+
   <!-- 3D Background (fixed, behind everything) -->
   <ThreeBackground client:only="react" />
 

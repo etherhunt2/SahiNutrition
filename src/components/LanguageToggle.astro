@@ -1,0 +1,72 @@
+---
+/**
+ * Small language toggle button for Navbar — lets users switch
+ * between EN/HI after initial selection.
+ */
+---
+
+<button class="lang-toggle" id="lang-toggle" aria-label="Switch language">
+  <span class="lang-toggle__label" id="lang-toggle-label">EN</span>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="2" y1="12" x2="22" y2="12"/>
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+  </svg>
+</button>
+
+<script>
+  const toggle = document.getElementById('lang-toggle');
+  const label = document.getElementById('lang-toggle-label');
+
+  function updateToggleLabel() {
+    const current = localStorage.getItem('sahi-lang') || 'en';
+    if (label) {
+      label.textContent = current === 'en' ? 'EN' : 'हि';
+    }
+  }
+
+  updateToggleLabel();
+
+  toggle?.addEventListener('click', () => {
+    const current = localStorage.getItem('sahi-lang') || 'en';
+    const next = current === 'en' ? 'hi' : 'en';
+    localStorage.setItem('sahi-lang', next);
+    document.documentElement.setAttribute('data-lang', next);
+    window.dispatchEvent(new CustomEvent('lang-change', { detail: next }));
+    updateToggleLabel();
+  });
+
+  window.addEventListener('lang-change', () => {
+    updateToggleLabel();
+  });
+</script>
+
+<style lang="scss">
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-2 $space-3;
+    background: rgba($color-accent-emerald, 0.1);
+    border: 1px solid rgba($color-accent-emerald, 0.25);
+    border-radius: $radius-full;
+    color: $color-accent-emerald;
+    cursor: pointer;
+    transition: all $transition-fast;
+    font-family: $font-heading;
+    font-size: $fs-xs;
+    font-weight: $fw-semibold;
+    letter-spacing: $ls-wide;
+
+    &:hover {
+      background: rgba($color-accent-emerald, 0.18);
+      border-color: $color-accent-emerald;
+      transform: scale(1.05);
+    }
+
+    &__label {
+      min-width: 18px;
+      text-align: center;
+    }
+  }
+</style>

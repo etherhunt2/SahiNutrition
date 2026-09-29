@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logoImg from '../assets/images/logo.jpg';
+import LanguageToggle from './LanguageToggle.astro';
 
 interface Props {
   showAdminLogin?: boolean;
@@ -30,6 +31,7 @@ const { showAdminLogin = false } = Astro.props;
       {showAdminLogin && (
         <a href="/admin/login" class="navbar__link" style="color: #10b981;">Admin Login</a>
       )}
+      <LanguageToggle />
       <a href="/#contact" class="navbar__cta btn-primary">Get Started</a>
     </div>
 

@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { useLang } from '../../i18n/useLang';
+import { translations } from '../../i18n/translations';
 
 interface StatItem {
   value: number;
@@ -7,11 +9,13 @@ interface StatItem {
   icon: string;
 }
 
+const STAT_LABEL_KEYS = ['statClientsCoached', 'statGoalAchievement', 'statDietPlansCreated', 'statYearsExperience'] as const;
+
 const STATS: StatItem[] = [
-  { value: 800, suffix: '+', label: 'Clients Coached', icon: 'users' },
-  { value: 94, suffix: '%', label: 'Goal Achievement', icon: 'target' },
-  { value: 5000, suffix: '+', label: 'Diet Plans Created', icon: 'file' },
-  { value: 12, suffix: '+', label: 'Years Experience', icon: 'award' },
+  { value: 800, suffix: '+', label: 'statClientsCoached', icon: 'users' },
+  { value: 94, suffix: '%', label: 'statGoalAchievement', icon: 'target' },
+  { value: 5000, suffix: '+', label: 'statDietPlansCreated', icon: 'file' },
+  { value: 12, suffix: '+', label: 'statYearsExperience', icon: 'award' },
 ];
 
 const MONTHLY_DATA = {
@@ -51,15 +55,17 @@ function AnimatedCounter({ value, suffix, inView }: { value: number; suffix: str
 }
 
 function BarChart({ inView }: { inView: boolean }) {
+  const lang = useLang();
+  const tr = translations.successStory;
   return (
     <div className="success-story__chart">
-      <h4 className="success-story__chart-title">Average Client Progress (6 Months)</h4>
+      <h4 className="success-story__chart-title">{tr.chartTitle[lang]}</h4>
       <div className="success-story__chart-legend">
         <span className="success-story__chart-legend-item">
-          <span className="success-story__dot success-story__dot--loss"></span> Weight Loss (kg)
+          <span className="success-story__dot success-story__dot--loss"></span> {tr.chartLossLabel[lang]}
         </span>
         <span className="success-story__chart-legend-item">
-          <span className="success-story__dot success-story__dot--gain"></span> Weight Gain (kg)
+          <span className="success-story__dot success-story__dot--gain"></span> {tr.chartGainLabel[lang]}
         </span>
       </div>
       <div className="success-story__bars">
@@ -94,19 +100,21 @@ function BarChart({ inView }: { inView: boolean }) {
 }
 
 function SatisfactionRing({ inView }: { inView: boolean }) {
+  const lang = useLang();
+  const tr = translations.successStory;
   const circumference = 2 * Math.PI * 60;
   const segments = [
-    { label: 'Exceeded Goals', percent: 42, color: '#10b981' },
-    { label: 'Met Goals', percent: 38, color: '#3b82f6' },
-    { label: 'Good Progress', percent: 14, color: '#f59e0b' },
-    { label: 'In Progress', percent: 6, color: '#6b7280' },
+    { label: tr.segExceeded[lang], percent: 42, color: '#10b981' },
+    { label: tr.segMet[lang], percent: 38, color: '#3b82f6' },
+    { label: tr.segGood[lang], percent: 14, color: '#f59e0b' },
+    { label: tr.segInProgress[lang], percent: 6, color: '#6b7280' },
   ];
 
   let offset = 0;
 
   return (
     <div className="success-story__ring-chart">
-      <h4 className="success-story__chart-title">Client Satisfaction</h4>
+      <h4 className="success-story__chart-title">{tr.satisfactionTitle[lang]}</h4>
       <div className="success-story__ring-wrapper">
         <svg width="160" height="160" viewBox="0 0 160 160">
           <circle cx="80" cy="80" r="60" fill="none" stroke="#1a1a1a" strokeWidth="16"/>
@@ -137,7 +145,7 @@ function SatisfactionRing({ inView }: { inView: boolean }) {
             94%
           </text>
           <text x="80" y="94" textAnchor="middle" fill="#a3a3a3" fontSize="10" fontFamily="Inter">
-            Success Rate
+            {tr.satisfactionRate[lang]}
           </text>
         </svg>
         <ul className="success-story__ring-legend">
@@ -189,6 +197,8 @@ function getIcon(icon: string) {
 }
 
 export default function SuccessStorySection() {
+  const lang = useLang();
+  const tr = translations.successStory;
   const [inView, setInView] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -210,13 +220,12 @@ export default function SuccessStorySection() {
   return (
     <section className="success-story" id="success" ref={sectionRef}>
       <div className="success-story__container">
-        <span className="success-story__label">Proven Results</span>
+        <span className="success-story__label">{tr.label[lang]}</span>
         <h2 className="success-story__title">
-          Our Success <span className="success-story__gradient">Story</span>
+          {tr.title[lang]} <span className="success-story__gradient">{tr.titleHighlight[lang]}</span>
         </h2>
         <p className="success-story__subtitle">
-          Numbers don't lie. Here's the impact we've made on our clients' lives 
-          over 12+ years of dedicated coaching.
+          {tr.subtitle[lang]}
         </p>
 
         {/* Stats Grid */}
@@ -227,7 +236,7 @@ export default function SuccessStorySection() {
                 {getIcon(stat.icon)}
               </div>
               <AnimatedCounter value={stat.value} suffix={stat.suffix} inView={inView} />
-              <span className="success-story__stat-label">{stat.label}</span>
+              <span className="success-story__stat-label">{(tr as any)[stat.label]?.[lang] || stat.label}</span>
             </div>
           ))}
         </div>
